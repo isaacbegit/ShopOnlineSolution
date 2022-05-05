@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using ShopOnline.API.Data;
+using ShopOnline.API.Repositories;
+using ShopOnline.API.Repositories.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//***IMPORTANT INSTRUCTION HERE - MUST CONFIGURE CONNECTION BEFORE RUNNING MIGRATIONS
+builder.Services.AddDbContextPool<ShopOnlineDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ShopOnlineConnection"))
+);
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
